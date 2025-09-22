@@ -1,5 +1,5 @@
 import {createContext, useContext, useEffect, useState } from "react"
-import axios from "axios"
+import api from "../services/api"
 
 const AuthContext = createContext()
 export const AuthProvider = ({children}) =>{
@@ -8,11 +8,14 @@ export const AuthProvider = ({children}) =>{
     
     const verificarAutenticacao = async () => {
     try {
-      const resposta = await axios.get('http://localhost:3000/api/verificar-token', {
+      const resposta = await api.get('/verificar-token', {
         withCredentials: true,
+        validateStatus: () => true
       })
+       console.log('Resposta da API:', resposta.data)
       setUsuario(resposta.data.usuario)
     } catch (err) {
+      console.error('Erro ao verificar autenticação:', err)
       setUsuario(null)
     } finally {
       setCarregando(false)

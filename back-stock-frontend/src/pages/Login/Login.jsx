@@ -13,11 +13,11 @@ const Login =() =>{
     const handleLogin = async (e) => {
         e.preventDefault()
         try{
-            await api.post('http://localhost:3000/api/login', {
+            await api.post('/login', {
                 email,
                 senha
             }, {withCredentials:true})
-            await recarregarUsuario()
+             await recarregarUsuario()
              navigate('/dashboard') 
         
         }catch(err){

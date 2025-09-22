@@ -19,7 +19,6 @@ const Login =() =>{
             }, {withCredentials:true})
              await recarregarUsuario()
              navigate('/dashboard') 
-        
         }catch(err){
             setErro('Email ou senha inválidos.')
         }

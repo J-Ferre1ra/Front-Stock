@@ -23,20 +23,28 @@ export const AuthProvider = ({children}) =>{
   }
   
   const recarregarUsuario = async () => {
-    setCarregando(true);
-    await verificarAutenticacao();
-  };
+    setCarregando(true)
+    await verificarAutenticacao()
+  }
+
+  const logout = async () => {
+    try {
+      await api.post('/logout')
+    }finally {
+      setUsuario(null)
+    }
+  }
 
   useEffect(() => {
-    verificarAutenticacao();
-  }, []);
+    verificarAutenticacao()
+  }, [])
 
   return (
-    <AuthContext.Provider value={{ usuario, carregando, recarregarUsuario }}>
+    <AuthContext.Provider value={{ usuario, carregando, recarregarUsuario, logout }}>
       {children}
     </AuthContext.Provider>
   )
 }
 
 
-export const useAuth = () => useContext(AuthContext);
+export const useAuth = () => useContext(AuthContext)

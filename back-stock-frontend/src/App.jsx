@@ -1,7 +1,7 @@
 import {BrowserRouter as Router, Routes, Route, Navigate} from 'react-router-dom'
 import PrivateRoute from './components/PrivateRoute'
 
-
+import './assets/styles/main.css'
 import Login from './pages/Login/Login'
 import Register from './pages/Register/Register'
 import Dashboard from './pages/Dashboard/Dashboard'
@@ -13,10 +13,9 @@ import Atividades from './pages/Atividades/Atividades'
 function App() {
   return (
     <>
-        <Routes>
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-
+      <Routes>
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
           <Route
             path="/dashboard"
             element={

@@ -1,0 +1,103 @@
+/* Cores principais */
+:root {
+  --inventory-blue: rgb(26, 115, 232);
+  --inventory-green: rgb(52, 168, 83);
+  --inventory-red: rgb(234, 67, 53);
+  --inventory-yellow: rgb(251, 188, 4);
+  --inventory-gray: rgb(95, 99, 104);
+
+  --inventory-lightBlue: rgb(232, 240, 254);
+  --inventory-lightGray: rgb(241, 243, 244);
+  --inventory-lightGreen: rgb(230, 244, 234);
+  --inventory-lightRed: rgb(252, 232, 230);
+  --inventory-lightYellow: rgb(254, 247, 224);
+}
+
+/* Estilos de Navegação (NavBar) */
+.navbar {
+  background-color: #1a202c;
+  color: white;
+  padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.nav-links {
+  display: flex;
+  list-style: none;
+  gap: 20px;
+}
+
+.nav-links li a {
+  color: white;
+  text-decoration: none;
+}
+
+.logo a {
+  color: #2b6cb0;
+  font-size: 24px;
+}
+
+.navbar .nav-links li a:hover {
+  color: #e2e8f0;
+}
+
+/* Cards (para o Dashboard) */
+.card {
+  padding: 20px;
+  background-color: var(--inventory-lightGray);
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  width: 200px;
+}
+
+.card h3 {
+  font-size: 18px;
+}
+
+.card h2 {
+  font-size: 24px;
+  margin-top: 10px;
+}
+
+/* Estilos para as seções */
+.section {
+  margin-top: 40px;
+}
+
+.section h2 {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+/* Tabela Genérica */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.table th, .table td {
+  padding: 10px;
+  border: 1px solid #ddd;
+  text-align: left;
+}
+
+.table th {
+  background-color: var(--inventory-lightGray);
+}
+
+/* Botões */
+button {
+  padding: 10px 20px;
+  background-color: var(--inventory-blue);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: var(--inventory-darkBlue);
+}

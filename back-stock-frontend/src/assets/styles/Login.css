@@ -173,3 +173,32 @@
     max-width: 100%;
   }
 }
+.login-success {
+  margin-bottom: 12px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  background-color: #dbeafe;
+  color: #1e40af; 
+  font-size: 14px;
+  border: 1px solid #93c5fd;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.login-error {
+  margin-bottom: 12px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  background-color: #fee2e2; /* vermelho claro */
+  color: #b91c1c; /* vermelho escuro */
+  font-size: 14px;
+  border: 1px solid #fca5a5;
+  animation: fadeIn 0.3s ease-in-out;
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-5px); }
+  to { opacity: 1; transform: translateY(0); }
+}

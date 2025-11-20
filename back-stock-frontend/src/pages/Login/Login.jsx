@@ -10,6 +10,7 @@ const Login = () => {
   const [senha, setSenha] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [erro, setErro] = useState("");
+  const [sucesso, setSucesso] = useState("");
   const [carregando, setCarregando] = useState(false);
 
   const navigate = useNavigate();
@@ -58,7 +59,8 @@ const Login = () => {
         </p>
 
         {erro && <div className="login-error">{erro}</div>}
-
+        {sucesso && <div className="login-success">{sucesso}</div>}
+      
         <form onSubmit={handleLogin} className="login-form">
           <div className="form-group">
             <label>Email</label>

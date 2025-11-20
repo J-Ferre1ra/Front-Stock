@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { registerRequest } from "../../services/api";
-import "../../assets/styles/Login.css"; 
+import "../../assets/styles/Login.css";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -9,6 +9,7 @@ const Register = () => {
   const [nome, setNome] = useState("");
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
+  const [sucesso, setSucesso] = useState("");
   const [creatorKey, setCreatorKey] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
@@ -22,8 +23,8 @@ const Register = () => {
 
     try {
       await registerRequest({ nome, email, senha, creatorKey });
-
-      navigate("/login");
+        setSucesso("Conta criada com sucesso!");
+        setTimeout(() => navigate("/login"), 1500);
 
     } catch (err) {
       const msg =
@@ -38,7 +39,6 @@ const Register = () => {
   return (
     <div className="login-page">
       <div className="login-card">
-        
         <header className="login-header">
           <div className="login-logo">📦</div>
           <span className="login-brand">EstoqueMaster</span>
@@ -50,10 +50,8 @@ const Register = () => {
         </p>
 
         {erro && <div className="login-error">{erro}</div>}
-
+        {sucesso && <div className="login-success">{sucesso}</div>}
         <form className="login-form" onSubmit={handleRegister}>
-          
-          {/* Nome */}
           <div className="form-group">
             <label htmlFor="nome">Nome</label>
             <div className="input-wrapper">
@@ -69,7 +67,6 @@ const Register = () => {
             </div>
           </div>
 
-          {/* Email */}
           <div className="form-group">
             <label htmlFor="email">Email</label>
             <div className="input-wrapper">
@@ -85,7 +82,6 @@ const Register = () => {
             </div>
           </div>
 
-          {/* Senha */}
           <div className="form-group">
             <label htmlFor="senha">Senha</label>
             <div className="input-wrapper">
@@ -134,7 +130,6 @@ const Register = () => {
             Entrar
           </Link>
         </p>
-
       </div>
     </div>
   );

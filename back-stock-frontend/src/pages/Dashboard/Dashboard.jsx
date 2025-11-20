@@ -1,78 +1,263 @@
-import React, { useState, useEffect } from 'react';
-import { getDashboardData } from '../../services/api'; // Importa a função da API
-import CardMetric from '../../components/CardMetric'; // Para exibir as métricas
-import TableGeneric from '../../components/TableGeneric'; // Para exibir transações e itens com estoque baixo
+import { useEffect, useState } from "react"
+import { getDashboardData } from "../../services/api"
+import "../../assets/styles/Dashboard.css"
 
-export default function Dashboard() {
-  const [dashboardData, setDashboardData] = useState(null);
-  const [recentTransactions, setRecentTransactions] = useState([]);
-  const [lowStockItems, setLowStockItems] = useState([]);
-  const [loading, setLoading] = useState(true);
+const Dashboard = () => {
+  const [dashboardData, setDashboardData] = useState(null)
+  const [carregando, setCarregando] = useState(true)
+  const [erro, setErro] = useState("")
 
   useEffect(() => {
-    const fetchDashboardData = async () => {
+    const fetchData = async () => {
       try {
-        // Pega os dados do Dashboard
+        setCarregando(true)
+        setErro("")
         const data = await getDashboardData();
         setDashboardData(data);
-
-        // Pega as transações recentes
-        setRecentTransactions(data.transacoesRecentes);
-
-        // Pega os itens com estoque baixo
-        setLowStockItems(data.itensComEstoqueBaixo);
-      } catch (error) {
-        console.error('Erro ao carregar dados do Dashboard:', error);
+      } catch (err) {
+        const msg =
+          err.response?.data?.erro ||
+          "Erro ao carregar dados do dashboard."
+        setErro(msg);
       } finally {
-        setLoading(false);
+        setCarregando(false);
       }
     };
 
-    fetchDashboardData();
+    fetchData();
   }, []);
 
-  // Se estiver carregando, mostra "Carregando..."
-  if (loading) {
-    return <div>Carregando...</div>;
-  }
-
-  // Se não houver dados
-  if (!dashboardData) {
-    return <div>Erro ao carregar dados do Dashboard</div>;
-  }
+  const totalProdutos = dashboardData?.totalProdutos ?? 0;
+  const totalVendas = dashboardData?.totalVendas ?? 0;
+  const itensBaixoEstoque = dashboardData?.itensComEstoqueBaixo ?? [];
+  const transacoesRecentes = dashboardData?.transacoesRecentes ?? [];
 
   return (
-    <div className="dashboard-container">
-      <h1>Dashboard</h1>
+    <div className="dashboard-page">
+      <header className="dashboard-header">
+        <div>
+          <h1 className="dashboard-title">Painel</h1>
+          <p className="dashboard-subtitle">
+            Bem-vindo(a) de volta! Aqui está um resumo do seu estoque.
+          </p>
+        </div>
+      </header>
 
-      {/* Cartões de Métricas */}
-      <div className="card-container">
-        <CardMetric title="Total de Produtos" value={dashboardData.totalProdutos} />
-        <CardMetric title="Total de Vendas" value={`R$ ${dashboardData.totalVendas}`} />
-        <CardMetric title="Total de Despesas" value={`R$ ${dashboardData.totalDespesas}`} />
-        <CardMetric title="Lucro" value={`R$ ${dashboardData.lucroLiquido}`} />
-        <CardMetric title="Saldo Atual" value={`R$ ${dashboardData.saldoAtual}`} />
-      </div>
+      {erro && <div className="dashboard-error">{erro}</div>}
 
-      {/* Transações Recentes */}
-      <div className="section">
-        <h2>Transações Recentes</h2>
-        <TableGeneric
-          columns={['ID', 'Produto', 'Quantidade', 'Valor']}
-          data={recentTransactions} // Dados de transações recentes
-          actions={[]} // Ações extras, se necessário
-        />
-      </div>
+      {carregando && !dashboardData ? (
+        <p>Carregando dados do dashboard...</p>
+      ) : (
+        <>
+          <section className="dashboard-metrics">
+            <div className="metric-card">
+              <div className="metric-header">
+                <span className="metric-label">Estoque Total</span>
+                <span className="metric-icon metric-icon-blue">📦</span>
+              </div>
+              <div className="metric-value">
+                {totalProdutos.toLocaleString("pt-BR")}
+              </div>
+              <p className="metric-caption">Total de produtos cadastrados</p>
+            </div>
 
-      {/* Itens com Estoque Baixo */}
-      <div className="section">
-        <h2>Itens com Estoque Baixo</h2>
-        <TableGeneric
-          columns={['ID', 'Produto', 'Quantidade em Estoque']}
-          data={lowStockItems} // Dados de itens com estoque baixo
-          actions={[]} // Ações extras, se necessário
-        />
-      </div>
+            <div className="metric-card">
+              <div className="metric-header">
+                <span className="metric-label">Vendas</span>
+                <span className="metric-icon metric-icon-green">📈</span>
+              </div>
+              <div className="metric-value">
+                {totalVendas.toLocaleString("pt-BR", {
+                  style: "currency",
+                  currency: "BRL",
+                })}
+              </div>
+              <p className="metric-caption">
+                Soma total das vendas registradas
+              </p>
+            </div>
+
+            <div className="metric-card">
+              <div className="metric-header">
+                <span className="metric-label">Itens com Estoque Baixo</span>
+                <span className="metric-icon metric-icon-red">⚠️</span>
+              </div>
+              <div className="metric-value">
+                {itensBaixoEstoque.length}
+              </div>
+              <p className="metric-caption">
+                Produtos abaixo do limite configurado
+              </p>
+            </div>
+          </section>
+
+          <section className="dashboard-main">
+            <div className="dashboard-column">
+              <div className="panel-card">
+                <div className="panel-card-header">
+                  <div>
+                    <h2 className="panel-title">Transações Recentes</h2>
+                    <p className="panel-subtitle">
+                      Movimentações recentes de estoque
+                    </p>
+                  </div>
+                  <button className="text-link-button">Ver Todas →</button>
+                </div>
+
+                <ul className="transactions-list">
+                  {transacoesRecentes.length === 0 && (
+                    <li className="transaction-item">
+                      <span className="transaction-description">
+                        Nenhuma transação encontrada.
+                      </span>
+                    </li>
+                  )}
+
+                  {transacoesRecentes.map((t) => {
+                    const tipo =
+                      t.tipo === "entrada"
+                        ? "entrada"
+                        : "saida";
+
+                    return (
+                      <li key={t._id || t.id} className="transaction-item">
+                        <div
+                          className={`transaction-icon transaction-icon-${tipo}`}
+                        >
+                          {tipo === "entrada" ? "⬇" : "⬆"}
+                        </div>
+                        <div className="transaction-info">
+                          <span className="transaction-title">
+                              {t.produto?.nome || t.observacao || "Transação"}
+                            </span>
+                          <span className="transaction-description">
+                            {t.tipo
+                              ? `Tipo: ${t.tipo}`
+                              : "Tipo não informado"}
+                          </span>
+                        </div>
+                        <div className="transaction-meta">
+                          <span className="transaction-amount">
+                            {typeof t.valor === "number"
+                              ? t.valor.toLocaleString("pt-BR", {
+                                  style: "currency",
+                                  currency: "BRL",
+                                })
+                              : "--"}
+                          </span>
+                          <span className="transaction-time">
+                            {t.data
+                              ? new Date(t.data).toLocaleString("pt-BR")
+                              : ""}
+                          </span>
+                        </div>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
+            </div>
+
+
+            <div className="dashboard-column">
+              <div className="panel-card">
+                <div className="panel-card-header">
+                  <div>
+                    <h2 className="panel-title">Alertas de Estoque Baixo</h2>
+                    <p className="panel-subtitle">
+                      Itens que precisam da sua atenção
+                    </p>
+                  </div>
+                  <button className="text-link-button">Ver Todos →</button>
+                </div>
+
+                <ul className="alerts-list">
+                  {itensBaixoEstoque.length === 0 && (
+                    <li className="alert-item">
+                      <span className="alert-description">
+                        Nenhum item com estoque baixo.
+                      </span>
+                    </li>
+                  )}
+
+                  {itensBaixoEstoque.map((item) => {
+                    const nome =
+                      item.nome ||
+                      item.nomeProduto ||
+                      item.descricao ||
+                      "Produto";
+                    const quantidade =
+                      item.quantidade ?? item.qtd ?? 0;
+
+                    return (
+                      <li
+                        key={item._id || item.id}
+                        className="alert-item"
+                      >
+                        <div className="alert-left">
+                          <div className="alert-indicator">
+                            {nome.charAt(0).toUpperCase()}
+                          </div>
+                          <div className="alert-info">
+                            <span className="alert-title">{nome}</span>
+                            <span className="alert-description">
+                              {quantidade} unidades restantes
+                            </span>
+                          </div>
+                        </div>
+
+                        
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
+            </div>
+          </section>
+
+          {/* Ações rápidas (ainda só visual, sem API específica) */}
+          <section className="dashboard-actions">
+            <div className="panel-card">
+              <h2 className="panel-title">Ações Rápidas</h2>
+              <p className="panel-subtitle">
+                Tarefas e relatórios mais comuns
+              </p>
+
+              <div className="quick-actions-grid">
+                <button className="quick-action-card">
+                  <div className="quick-action-icon">📦</div>
+                  <span className="quick-action-title">
+                    Adicionar Estoque
+                  </span>
+                </button>
+
+                <button className="quick-action-card">
+                  <div className="quick-action-icon">📈</div>
+                  <span className="quick-action-title">
+                    Registrar Venda
+                  </span>
+                </button>
+
+                <button className="quick-action-card">
+                  <div className="quick-action-icon">📋</div>
+                  <span className="quick-action-title">
+                    Gerar Relatório
+                  </span>
+                </button>
+
+                <button className="quick-action-card">
+                  <div className="quick-action-icon">➕</div>
+                  <span className="quick-action-title">
+                    Adicionar Produto
+                  </span>
+                </button>
+              </div>
+            </div>
+          </section>
+        </>
+      )}
     </div>
   );
-}
+};
+
+export default Dashboard;

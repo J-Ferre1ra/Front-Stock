@@ -1,0 +1,96 @@
+/* NAVBAR GLOBAL */
+.navbar {
+  width: 100%;
+  height: 64px;
+  background-color: #ffffff;
+  border-bottom: 1px solid #e5e7eb;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 28px;
+  box-sizing: border-box;
+  position: sticky;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+}
+
+/* ------------------- LEFT SIDE ------------------- */
+.navbar-left {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+/* LOGO */
+.navbar-logo {
+  width: 36px;
+  height: 36px;
+  border-radius: 999px;
+  background-color: #e3edff;
+  color: #2563eb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+}
+
+/* BRAND NAME */
+.navbar-brand {
+  font-size: 20px;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+/* NAVIGATION LINKS */
+.navbar-links {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.nav-item {
+  font-size: 15px;
+  color: #475569;
+  text-decoration: none;
+  padding: 6px 8px;
+  border-radius: 6px;
+  transition: all 0.15s ease-in-out;
+}
+
+.nav-item:hover {
+  background-color: #f1f5f9;
+  color: #1e293b;
+}
+
+/* Active route style (NavLink from react-router-dom) */
+.nav-item.active {
+  background-color: #e0ecff;
+  color: #2563eb;
+  font-weight: 600;
+}
+
+/* ------------------- RIGHT SIDE ------------------- */
+.navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* LOGOUT BUTTON */
+.navbar-logout-button {
+  background-color: transparent;
+  border: 1px solid #e5e7eb;
+  padding: 10px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #334155;
+  transition: 0.2s ease-in-out;
+}
+
+.navbar-logout-button:hover {
+  background-color: #f8fafc;
+}

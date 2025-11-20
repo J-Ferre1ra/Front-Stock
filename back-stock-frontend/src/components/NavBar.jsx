@@ -1,29 +1,57 @@
-import { Link, useNavigate } from "react-router-dom"
+import { NavLink, useNavigate } from "react-router-dom";
+import "../assets/styles/navbar.css";
+import { logoutRequest } from "../services/api";
 
-export default function NavBar() {
-    const navigate = useNavigate()
+const Navbar = () => {
+  const navigate = useNavigate();
 
-    const handleLogout = () => {
-        localStorage.removeItem('authToken')
-
-        navigate('/login')
+  const handleLogout = async () => {
+    try {
+      await logoutRequest();
+    } catch (e) {
+      console.log("Erro ao fazer logout:", e);
     }
 
-    return (
-        <nav className="navbar">
-            <div className="logo">
-                <Link to="/">EstoqueMaster</Link>
-            </div>
-            <ul className="nav-links">
-                <li><Link to="/dashboard">Dashboard</Link></li>
-                <li><Link to="/estoque">Estoque</Link></li>
-                <li><Link to="/transacoes">Transações</Link></li>
-                <li><Link to="/clientes">Clientes</Link></li>
-                <li><Link to="/atividade-log">Atividades</Link></li>
-            </ul>
-            <div className="user-actions">
-                <button onClick={handleLogout}>Sair</button>
-            </div>
-        </nav>
-    )
-}
+    localStorage.removeItem("token");
+    navigate("/login");
+  };
+
+  return (
+    <nav className="navbar">
+      <div className="navbar-left">
+        <div className="navbar-logo">📦</div>
+        <span className="navbar-brand">EstoqueMaster</span>
+
+        <div className="navbar-links">
+          <NavLink to="/dashboard" className="nav-item">
+            Painel
+          </NavLink>
+
+          <NavLink to="/produtos" className="nav-item">
+            Estoque
+          </NavLink>
+
+          <NavLink to="/transacoes" className="nav-item">
+            Transações
+          </NavLink>
+
+          <NavLink to="/clientes" className="nav-item">
+            Clientes
+          </NavLink>
+
+          <NavLink to="/atividades" className="nav-item">
+            Registro de Atividades
+          </NavLink>
+        </div>
+      </div>
+
+      <div className="navbar-right">
+        <button className="navbar-logout-button" onClick={handleLogout}>
+          Sair
+        </button>
+      </div>
+    </nav>
+  );
+};
+
+export default Navbar;

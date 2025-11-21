@@ -1,0 +1,152 @@
+/* Página Clientes */
+.clientes-page {
+  padding: 32px;
+  font-family: "Inter", sans-serif;
+}
+
+/* Cabeçalho */
+.clientes-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 26px;
+}
+
+.clientes-title {
+  font-size: 32px;
+  font-weight: 700;
+}
+
+.clientes-subtitle {
+  color: #6b7280;
+  font-size: 14px;
+}
+
+/* Card principal */
+.clientes-card {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 4px 20px rgba(15, 23, 42, 0.03);
+}
+
+/* Topbar */
+.clientes-topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.clientes-card-title {
+  font-size: 20px;
+  font-weight: 600;
+}
+
+/* Busca */
+.clientes-search {
+  display: flex;
+  align-items: center;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 0 12px;
+  height: 40px;
+}
+
+.search-icon {
+  margin-right: 6px;
+  font-size: 14px;
+}
+
+.clientes-search input {
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 14px;
+}
+
+/* Tabela */
+.clientes-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 8px;
+}
+
+.clientes-table thead th {
+  text-align: left;
+  padding: 8px;
+  color: #6b7280;
+  font-size: 13px;
+}
+
+.clientes-table tbody tr {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+}
+
+.clientes-table tbody td {
+  padding: 10px;
+  font-size: 14px;
+  border-top: 1px solid #f3f4f6;
+}
+
+.empty-row {
+  text-align: center;
+  padding: 20px;
+  color: #6b7280;
+}
+
+/* Botões */
+.btn-primary {
+  background: #111827;
+  color: white;
+  border: none;
+  padding: 9px 16px;
+  border-radius: 10px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.btn-primary:hover {
+  opacity: 0.85;
+}
+
+.btn-edit {
+  background: #e0f2fe;
+  color: #0369a1;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-right: 6px;
+}
+
+.btn-edit:hover {
+  background: #bae6fd;
+}
+
+.btn-delete {
+  background: #fee2e2;
+  color: #b91c1c;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.btn-delete:hover {
+  background: #fecaca;
+}
+
+/* Mensagens */
+.clientes-error {
+  background: #fee2e2;
+  color: #b91c1c;
+  border: 1px solid #fecaca;
+  padding: 10px 12px;
+  border-radius: 8px;
+  margin-bottom: 12px;
+}

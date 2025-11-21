@@ -1,0 +1,107 @@
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.modal-box {
+  background: white;
+  width: 450px;
+  border-radius: 14px;
+  padding: 24px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+  animation: modalFade 0.25s ease;
+}
+
+@keyframes modalFade {
+  from { opacity: 0; transform: scale(0.94); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.modal-title {
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+/* Formulário */
+.modal-form label {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 5px;
+  display: block;
+}
+
+.input-field {
+  width: 100%;
+  margin-bottom: 16px;
+  padding: 10px 12px;
+  font-size: 14px;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  outline: none;
+  background: #f9fafb;
+}
+
+.input-field:focus {
+  border-color: #111827;
+}
+
+/* Mensagens */
+.modal-error {
+  background: #fee2e2;
+  color: #b91c1c;
+  border: 1px solid #fecaca;
+  padding: 10px;
+  border-radius: 8px;
+  margin-bottom: 12px;
+}
+
+.modal-success {
+  background: #dcfce7;
+  color: #166534;
+  border: 1px solid #bbf7d0;
+  padding: 10px;
+  border-radius: 8px;
+  margin-bottom: 12px;
+}
+
+/* Botões */
+.modal-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.btn-save {
+  background: #111827;
+  color: white;
+  padding: 9px 16px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.btn-save:hover {
+  opacity: 0.85;
+}
+
+.btn-cancel {
+  background: #f3f4f6;
+  color: #111827;
+  border: 1px solid #e5e7eb;
+  padding: 9px 16px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.btn-cancel:hover {
+  background: #e5e7eb;
+}

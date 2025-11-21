@@ -67,6 +67,25 @@ export const createTransaction = (data) => {
   return api.post("/transacoes", data);
 };
 
+export const listClients = () => {
+  return api.get("/clientes");
+};
+
+export const createClient = (data) => {
+  return api.post("/clientes", data);
+};
+
+export const updateClient = (id, data) => {
+  return api.put(`/clientes/${id}`, data);
+};
+
+export const deleteClient = (id) => {
+  return api.delete(`/clientes/${id}`);
+};
+
+export const listLogs = () =>
+  api.get("/atividades", { withCredentials: true }
+);
 
 
 export default api

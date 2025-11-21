@@ -1,23 +1,27 @@
-import { useEffect, useState } from "react"
-import { getDashboardData } from "../../services/api"
-import "../../assets/styles/Dashboard.css"
+import { useEffect, useState } from "react";
+import { getDashboardData } from "../../services/api";
+import "../../assets/styles/Dashboard.css";
+import { useNavigate } from "react-router-dom";
+import ModalRelatorio from "../../components/ModalRelatorio";
 
 const Dashboard = () => {
-  const [dashboardData, setDashboardData] = useState(null)
-  const [carregando, setCarregando] = useState(true)
-  const [erro, setErro] = useState("")
+  const [dashboardData, setDashboardData] = useState(null);
+  const [carregando, setCarregando] = useState(true);
+  const [erro, setErro] = useState("");
+  const [modalRelatorio, setModalRelatorio] = useState(false);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        setCarregando(true)
-        setErro("")
+        setCarregando(true);
+        setErro("");
         const data = await getDashboardData();
         setDashboardData(data);
       } catch (err) {
         const msg =
-          err.response?.data?.erro ||
-          "Erro ao carregar dados do dashboard."
+          err.response?.data?.erro || "Erro ao carregar dados do dashboard.";
         setErro(msg);
       } finally {
         setCarregando(false);
@@ -58,7 +62,9 @@ const Dashboard = () => {
               <div className="metric-value">
                 {totalProdutos.toLocaleString("pt-BR")}
               </div>
-              <p className="metric-caption">Total de produtos cadastrados</p>
+              <p className="metric-caption">
+                Total de produtos cadastrados
+              </p>
             </div>
 
             <div className="metric-card">
@@ -82,9 +88,7 @@ const Dashboard = () => {
                 <span className="metric-label">Itens com Estoque Baixo</span>
                 <span className="metric-icon metric-icon-red">⚠️</span>
               </div>
-              <div className="metric-value">
-                {itensBaixoEstoque.length}
-              </div>
+              <div className="metric-value">{itensBaixoEstoque.length}</div>
               <p className="metric-caption">
                 Produtos abaixo do limite configurado
               </p>
@@ -101,7 +105,13 @@ const Dashboard = () => {
                       Movimentações recentes de estoque
                     </p>
                   </div>
-                  <button className="text-link-button">Ver Todas →</button>
+
+                  <button
+                    className="text-link-button"
+                    onClick={() => navigate("/transacoes")}
+                  >
+                    Ver Todas →
+                  </button>
                 </div>
 
                 <ul className="transactions-list">
@@ -114,13 +124,10 @@ const Dashboard = () => {
                   )}
 
                   {transacoesRecentes.map((t) => {
-                    const tipo =
-                      t.tipo === "entrada"
-                        ? "entrada"
-                        : "saida";
+                    const tipo = t.tipo === "entrada" ? "entrada" : "saida";
 
                     return (
-                      <li key={t._id || t.id} className="transaction-item">
+                      <li key={t._id} className="transaction-item">
                         <div
                           className={`transaction-icon transaction-icon-${tipo}`}
                         >
@@ -128,22 +135,18 @@ const Dashboard = () => {
                         </div>
                         <div className="transaction-info">
                           <span className="transaction-title">
-                              {t.produto?.nome || t.observacao || "Transação"}
-                            </span>
+                            {t.produto?.nome || t.observacao || "Transação"}
+                          </span>
                           <span className="transaction-description">
-                            {t.tipo
-                              ? `Tipo: ${t.tipo}`
-                              : "Tipo não informado"}
+                            Tipo: {t.tipo}
                           </span>
                         </div>
                         <div className="transaction-meta">
                           <span className="transaction-amount">
-                            {typeof t.valor === "number"
-                              ? t.valor.toLocaleString("pt-BR", {
-                                  style: "currency",
-                                  currency: "BRL",
-                                })
-                              : "--"}
+                            {t.valor?.toLocaleString("pt-BR", {
+                              style: "currency",
+                              currency: "BRL",
+                            })}
                           </span>
                           <span className="transaction-time">
                             {t.data
@@ -158,7 +161,6 @@ const Dashboard = () => {
               </div>
             </div>
 
-
             <div className="dashboard-column">
               <div className="panel-card">
                 <div className="panel-card-header">
@@ -168,7 +170,13 @@ const Dashboard = () => {
                       Itens que precisam da sua atenção
                     </p>
                   </div>
-                  <button className="text-link-button">Ver Todos →</button>
+
+                  <button
+                    className="text-link-button"
+                    onClick={() => navigate("/produtos")}
+                  >
+                    Ver Todos →
+                  </button>
                 </div>
 
                 <ul className="alerts-list">
@@ -182,22 +190,16 @@ const Dashboard = () => {
 
                   {itensBaixoEstoque.map((item) => {
                     const nome =
-                      item.nome ||
-                      item.nomeProduto ||
-                      item.descricao ||
-                      "Produto";
-                    const quantidade =
-                      item.quantidade ?? item.qtd ?? 0;
+                      item.nome || item.nomeProduto || item.descricao || "Produto";
+                    const quantidade = item.quantidade ?? 0;
 
                     return (
-                      <li
-                        key={item._id || item.id}
-                        className="alert-item"
-                      >
+                      <li key={item._id} className="alert-item">
                         <div className="alert-left">
                           <div className="alert-indicator">
                             {nome.charAt(0).toUpperCase()}
                           </div>
+
                           <div className="alert-info">
                             <span className="alert-title">{nome}</span>
                             <span className="alert-description">
@@ -205,8 +207,6 @@ const Dashboard = () => {
                             </span>
                           </div>
                         </div>
-
-                        
                       </li>
                     );
                   })}
@@ -215,45 +215,42 @@ const Dashboard = () => {
             </div>
           </section>
 
-          {/* Ações rápidas (ainda só visual, sem API específica) */}
           <section className="dashboard-actions">
             <div className="panel-card">
               <h2 className="panel-title">Ações Rápidas</h2>
-              <p className="panel-subtitle">
-                Tarefas e relatórios mais comuns
-              </p>
+              <p className="panel-subtitle">Tarefas e relatórios mais comuns</p>
 
               <div className="quick-actions-grid">
-                <button className="quick-action-card">
+                <button
+                  className="quick-action-card"
+                  onClick={() => navigate("/transacoes")}
+                >
                   <div className="quick-action-icon">📦</div>
-                  <span className="quick-action-title">
-                    Adicionar Estoque
-                  </span>
+                  <span className="quick-action-title">Adicionar Estoque</span>
                 </button>
 
-                <button className="quick-action-card">
+                <button
+                  className="quick-action-card"
+                  onClick={() => navigate("/transacoes")}
+                >
                   <div className="quick-action-icon">📈</div>
-                  <span className="quick-action-title">
-                    Registrar Venda
-                  </span>
+                  <span className="quick-action-title">Registrar Venda</span>
                 </button>
 
-                <button className="quick-action-card">
+                <button
+                  className="quick-action-card"
+                  onClick={() => setModalRelatorio(true)}
+                >
                   <div className="quick-action-icon">📋</div>
-                  <span className="quick-action-title">
-                    Gerar Relatório
-                  </span>
-                </button>
-
-                <button className="quick-action-card">
-                  <div className="quick-action-icon">➕</div>
-                  <span className="quick-action-title">
-                    Adicionar Produto
-                  </span>
+                  <span className="quick-action-title">Gerar Relatório</span>
                 </button>
               </div>
             </div>
           </section>
+
+          {modalRelatorio && (
+            <ModalRelatorio fechar={() => setModalRelatorio(false)} />
+          )}
         </>
       )}
     </div>

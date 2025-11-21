@@ -1,0 +1,77 @@
+.leilao-page {
+  padding: 30px;
+  font-family: "Inter", sans-serif;
+}
+
+.leilao-title {
+  font-size: 32px;
+  font-weight: 700;
+}
+
+.leilao-subtitle {
+  color: #6b7280;
+  margin-bottom: 25px;
+}
+
+.leilao-container {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.leilao-card {
+  padding: 20px;
+  border-radius: 14px;
+  border: 1px solid #e5e7eb;
+  background: white;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.05);
+}
+
+.produto-nome {
+  font-size: 24px;
+  margin-bottom: 4px;
+}
+
+.produto-preco {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.produto-desc {
+  margin: 10px 0;
+  color: #4b5563;
+}
+
+.copiar-btn {
+  background: #111827;
+  color: white;
+  border: none;
+  padding: 10px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  margin: 15px 0;
+}
+
+.copiar-btn:hover {
+  background: #1f2937;
+}
+
+.imagens-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 14px;
+}
+
+.imagem-item {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 1px solid #d1d5db;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.imagem-item:hover {
+  transform: scale(1.03);
+}

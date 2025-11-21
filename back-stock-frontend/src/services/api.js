@@ -32,4 +32,41 @@ export const getDashboardData = async () => {
   }
 };
 
+export const listProducts = (params = {}) => {
+  return api.get("/produtos", { params });
+};
+
+
+export const createProduct = (formData) => {
+  return api.post("/produtos", formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+};
+
+export const editProduct = (id, payload) => {
+  return api.put(`/produtos/${id}`, payload);
+};
+
+export const deleteProduct = (id) => {
+  return api.delete(`/produtos/${id}`);
+};
+
+export const baixarRelatorioEstoque = () => {
+  return api.get("/relatorio/estoque-com-imagens", {
+    responseType: "blob", 
+  });
+};
+
+export const listTransactions = () => {
+  return api.get("/transacoes");
+};
+
+export const createTransaction = (data) => {
+  return api.post("/transacoes", data);
+};
+
+
+
 export default api

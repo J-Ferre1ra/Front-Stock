@@ -10,6 +10,7 @@ import Produtos from "./pages/Produtos/Produtos";
 import Clientes from "./pages/Clientes/Clientes";
 import Transacoes from "./pages/Transacoes/Transacoes";
 import Atividades from "./pages/Atividades/Atividades";
+import Leilao from "./pages/Leilao/Leilao";
 import Layout from "./components/LayoutGlobal";
 
 function App() {
@@ -30,6 +31,7 @@ function App() {
         <Route path="/clientes" element={<Clientes />} />
         <Route path="/transacoes" element={<Transacoes />} />
         <Route path="/atividades" element={<Atividades />} />
+        <Route path="/leilao" element={<Leilao />} />
       </Route>
 
       <Route path="*" element={<Navigate to="/login" />} />

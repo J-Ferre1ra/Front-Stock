@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { loginRequest } from "../../services/api";
+import { useAuth } from "../../contexts/AuthContext";
 import "../../assets/styles/Login.css";
 
 const Login = () => {
@@ -14,6 +15,7 @@ const Login = () => {
   const [carregando, setCarregando] = useState(false);
 
   const navigate = useNavigate();
+  const { recarregarUsuario } = useAuth();
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -30,6 +32,12 @@ const Login = () => {
       }
 
       localStorage.setItem("token", token);
+
+      try {
+        await recarregarUsuario();
+      } catch (e) {
+        console.warn('Erro ao recarregar usuário após login:', e);
+      }
 
       navigate("/dashboard");
 

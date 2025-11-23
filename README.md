@@ -1,7 +1,9 @@
 # 📦 EstoqueMaster - Front-end
 
 Sistema completo de gestão de estoque, vendas, clientes e leilão, desenvolvido para uso profissional em pequenas e médias empresas.
-Interface do sistema de gestão de estoque desenvolvida em **React + Vite**, com foco em simplicidade, performance e fluxo intuitivo para o usuário.
+
+Este sistema foi desenvolvido como um projeto freelance e está autorizado para ser apresentado como portfólio.
+O front-end foi construído com React e Vite, utilizando componentes funcionais, gerenciamento de estado via hooks, consumo de API com Axios e integração completa com o sistema de autenticação baseado em JWT.
 
 ---
 

@@ -5,6 +5,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { loginRequest } from "../../services/api";
 import { useAuth } from "../../contexts/AuthContext";
 import "../../assets/styles/Login.css";
+import { Eye, EyeOff } from "lucide-react";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -100,7 +101,7 @@ const Login = () => {
                 className="input-action"
                 onClick={() => setShowPassword(!showPassword)}
               >
-                {showPassword ? "🙈" : "👁️"}
+                {showPassword ? <EyeOff size={18}/> : <Eye size={18}/>}
               </button>
             </div>
           </div>

@@ -2,6 +2,8 @@ import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { registerRequest } from "../../services/api";
 import "../../assets/styles/Login.css";
+import { Eye, EyeOff } from "lucide-react";
+
 
 const Register = () => {
   const navigate = useNavigate();
@@ -94,12 +96,12 @@ const Register = () => {
                 onChange={(e) => setSenha(e.target.value)}
                 required
               />
-              <button
+               <button
                 type="button"
                 className="input-action"
                 onClick={() => setShowPassword(!showPassword)}
               >
-                {showPassword ? "🙈" : "👁️"}
+                {showPassword ? <EyeOff size={18}/> : <Eye size={18}/>}
               </button>
             </div>
           </div>

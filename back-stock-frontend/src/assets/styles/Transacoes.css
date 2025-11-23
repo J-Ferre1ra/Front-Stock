@@ -189,3 +189,28 @@
   background: #e5e7eb;
   color: #374151;
 }
+/* Adicione isso em Produtos.css, Transacoes.css e ModalRelatorio.css */
+.toast-flutuante {
+  position: fixed;
+  top: 24px;
+  right: 24px;
+  background-color: #111827;
+  color: #ffffff;
+  padding: 12px 24px;
+  border-radius: 10px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  z-index: 10000; /* Z-index alto para ficar acima dos modais */
+  font-weight: 500;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+}
+
+.slide-in {
+  animation: slideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes slideIn {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}

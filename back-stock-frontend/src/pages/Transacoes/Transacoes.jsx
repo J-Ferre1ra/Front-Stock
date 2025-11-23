@@ -4,14 +4,23 @@ import ModalTransacao from "../../components/ModalTransacao";
 import "../../assets/styles/Transacoes.css";
 import ModalPeriodo from "../../components/ModalPeriodo";
 
-
 function Transacoes() {
   const [transacoes, setTransacoes] = useState([]);
   const [carregando, setCarregando] = useState(true);
   const [erro, setErro] = useState("");
   const [busca, setBusca] = useState("");
+  
+  // Modais
   const [modalAberto, setModalAberto] = useState(false);
   const [modalPeriodoAberto, setModalPeriodoAberto] = useState(false);
+
+  // NOVO: Feedback Visual (Toast)
+  const [feedback, setFeedback] = useState("");
+
+  const mostrarFeedback = (mensagem) => {
+    setFeedback(mensagem);
+    setTimeout(() => setFeedback(""), 3000);
+  };
 
   const carregar = async () => {
     try {
@@ -20,10 +29,9 @@ function Transacoes() {
       const response = await listTransactions();
       setTransacoes(response.data);
     } catch (err) {
-      const msg =
-        err.response?.data?.erro ||
-        "Erro ao carregar transações.";
+      const msg = err.response?.data?.erro || "Erro ao carregar transações.";
       setErro(msg);
+      mostrarFeedback("❌ " + msg);
     } finally {
       setCarregando(false);
     }
@@ -34,34 +42,36 @@ function Transacoes() {
   }, []);
 
   const transacoesFiltradas = transacoes.filter((t) => {
-    const texto =
-      (t.produto?.nome || "") +
-      " " +
-      (t.tipo || "") +
-      " " +
-      (t.observacao || "");
+    const texto = (t.produto?.nome || "") + " " + (t.tipo || "") + " " + (t.observacao || "");
     return texto.toLowerCase().includes(busca.toLowerCase());
   });
 
   const gerarRelatorio = (filtros) => {
-  let url = "http://localhost:3000/api/relatorio/transacoes";
+    mostrarFeedback("⏳ Iniciando download do relatório...");
+    
+    let url = "http://localhost:3000/api/relatorio/transacoes";
 
-  if (filtros.tipoPeriodo) {
-    url += `?periodo=${filtros.tipoPeriodo}`;
-  }
+    if (filtros.tipoPeriodo) {
+      url += `?periodo=${filtros.tipoPeriodo}`;
+    }
 
-  if (filtros.inicio && filtros.fim) {
-    url += `?inicio=${filtros.inicio}&fim=${filtros.fim}`;
-  }
+    if (filtros.inicio && filtros.fim) {
+      url += `?inicio=${filtros.inicio}&fim=${filtros.fim}`;
+    }
 
-  window.open(url, "_blank");
-
-  setModalPeriodoAberto(false);
-};
-
+    // Pequeno delay para abrir a janela, apenas para o usuário ver o feedback
+    setTimeout(() => {
+        window.open(url, "_blank");
+        setModalPeriodoAberto(false);
+        mostrarFeedback("✅ Relatório gerado em nova aba!");
+    }, 500);
+  };
 
   return (
     <div className="trans-page">
+      {/* TOAST FLUTUANTE */}
+      {feedback && <div className="toast-flutuante slide-in">{feedback}</div>}
+
       <header className="trans-header">
         <div>
           <h1 className="trans-title">Transações</h1>
@@ -85,11 +95,7 @@ function Transacoes() {
           </div>
 
           <div className="trans-actions">
-            
-            <button
-              className="btn-primary"
-              onClick={() => setModalAberto(true)}
-            >
+            <button className="btn-primary" onClick={() => setModalAberto(true)}>
               ＋ Nova Transação
             </button>
           </div>
@@ -130,10 +136,7 @@ function Transacoes() {
                 </tr>
               ) : (
                 transacoesFiltradas.map((t) => {
-                  const dataFormatada = t.data
-                    ? new Date(t.data).toLocaleDateString("pt-BR")
-                    : "-";
-
+                  const dataFormatada = t.data ? new Date(t.data).toLocaleDateString("pt-BR") : "-";
                   const tipo = t.tipo || "";
                   let tipoClasse = "badge-neutral";
                   let tipoLabel = tipo;
@@ -156,24 +159,15 @@ function Transacoes() {
                     <tr key={t._id}>
                       <td>{t._id?.slice(-6) || "-"}</td>
                       <td>{dataFormatada}</td>
-                      <td>
-                        <span className={`badge ${tipoClasse}`}>
-                          {tipoLabel}
-                        </span>
-                      </td>
+                      <td><span className={`badge ${tipoClasse}`}>{tipoLabel}</span></td>
                       <td>{t.produto?.nome || "-"}</td>
                       <td>{t.quantidade}</td>
                       <td>
                         {typeof t.valor === "number"
-                          ? t.valor.toLocaleString("pt-BR", {
-                              style: "currency",
-                              currency: "BRL",
-                            })
+                          ? t.valor.toLocaleString("pt-BR", { style: "currency", currency: "BRL" })
                           : "-"}
                       </td>
-                      <td className="col-observacao">
-                        {t.observacao || "-"}
-                      </td>
+                      <td className="col-observacao">{t.observacao || "-"}</td>
                     </tr>
                   );
                 })
@@ -183,20 +177,8 @@ function Transacoes() {
         )}
       </div>
 
-      {modalAberto && (
-        <ModalTransacao
-          fechar={() => setModalAberto(false)}
-          atualizar={carregar}
-        />
-      )}
-
-      {modalPeriodoAberto && (
-         <ModalPeriodo
-            fechar={() => setModalPeriodoAberto(false)}
-            gerar={gerarRelatorio}
-        />
-      )}
-
+      {modalAberto && <ModalTransacao fechar={() => setModalAberto(false)} atualizar={carregar} />}
+      {modalPeriodoAberto && <ModalPeriodo fechar={() => setModalPeriodoAberto(false)} gerar={gerarRelatorio} />}
     </div>
   );
 }

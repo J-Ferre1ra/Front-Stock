@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
-import { listProducts } from "../../services/api";
+import { listProducts, baixarRelatorioEstoque } from "../../services/api";
 import ModalAddProduct from "../../components/ModalAddProduct";
 import ModalEditProduct from "../../components/ModalEditProduct";
 import ModalDeleteProduct from "../../components/ModalDeleteProduct";
-import { baixarRelatorioEstoque } from "../../services/api";
 import "../../assets/styles/Produtos.css";
 
 function Produtos() {
@@ -11,25 +10,32 @@ function Produtos() {
   const [carregando, setCarregando] = useState(true);
   const [erro, setErro] = useState("");
   const [busca, setBusca] = useState("");
+  
+  // Modais
   const [modalAberto, setModalAberto] = useState(false);
   const [modalEditarAberto, setModalEditarAberto] = useState(false);
   const [produtoEditando, setProdutoEditando] = useState(null);
   const [modalExcluirAberto, setModalExcluirAberto] = useState(false);
   const [produtoExcluindo, setProdutoExcluindo] = useState(null);
 
+  // NOVO: Feedback Visual (Toast)
+  const [feedback, setFeedback] = useState("");
+
+  const mostrarFeedback = (mensagem) => {
+    setFeedback(mensagem);
+    setTimeout(() => setFeedback(""), 3000);
+  };
 
   const carregar = async (filtroNome = "") => {
     try {
       setCarregando(true);
       setErro("");
-      const response = await listProducts(
-        filtroNome ? { nome: filtroNome } : {}
-      );
+      const response = await listProducts(filtroNome ? { nome: filtroNome } : {});
       setProdutos(response.data);
     } catch (err) {
-      const msg =
-        err.response?.data?.erro || "Erro ao carregar produtos.";
+      const msg = err.response?.data?.erro || "Erro ao carregar produtos.";
       setErro(msg);
+      mostrarFeedback("❌ " + msg);
     } finally {
       setCarregando(false);
     }
@@ -45,6 +51,7 @@ function Produtos() {
   const handleRefresh = () => {
     setBusca("");
     carregar();
+    mostrarFeedback("🔄 Lista atualizada!");
   };
 
   const abrirModalEditar = (produto) => {
@@ -58,34 +65,39 @@ function Produtos() {
   };
 
   const abrirModalExcluir = (produto) => {
-  setProdutoExcluindo(produto);
-  setModalExcluirAberto(true);
-};
+    setProdutoExcluindo(produto);
+    setModalExcluirAberto(true);
+  };
 
-const fecharModalExcluir = () => {
-  setProdutoExcluindo(null);
-  setModalExcluirAberto(false);
-};
+  const fecharModalExcluir = () => {
+    setProdutoExcluindo(null);
+    setModalExcluirAberto(false);
+  };
 
-const handleRelatorioPDF = async () => {
-  try {
-    const response = await baixarRelatorioEstoque();
-
-    const url = window.URL.createObjectURL(new Blob([response.data]));
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = "relatorio_estoque.pdf";
-    document.body.appendChild(link);
-    link.click();
-    link.remove();
-  } catch (err) {
-    alert("Erro ao gerar o relatório PDF.");
-  }
-};
-
+  // Lógica de Relatório com Feedback
+  const handleRelatorioPDF = async () => {
+    mostrarFeedback("⏳ Gerando PDF de estoque...");
+    try {
+      const response = await baixarRelatorioEstoque();
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "relatorio_estoque.pdf";
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      
+      mostrarFeedback("📄 Relatório baixado com sucesso!");
+    } catch (err) {
+      mostrarFeedback("❌ Erro ao gerar o relatório PDF.");
+    }
+  };
 
   return (
     <div className="produtos-page">
+      {/* TOAST FLUTUANTE */}
+      {feedback && <div className="toast-flutuante slide-in">{feedback}</div>}
+
       <h1 className="produtos-title">Estoque</h1>
       <p className="produtos-subtitle">
         Gerencie seus itens de estoque e níveis de produtos.
@@ -109,8 +121,8 @@ const handleRelatorioPDF = async () => {
               🔁 Atualizar
             </button>
             <button className="btn-secondary" onClick={handleRelatorioPDF}>
-                📄 Relatório PDF
-                </button>
+              📄 Relatório PDF
+            </button>
             <button className="btn-primary" onClick={abrirModal}>
               ＋ Adicionar Item
             </button>
@@ -143,53 +155,19 @@ const handleRelatorioPDF = async () => {
                 </tr>
               ) : (
                 produtos.map((p) => {
-                  const status =
-                    p.quantidade === 0
-                      ? "Sem Estoque"
-                      : p.quantidade < 10
-                      ? "Estoque Baixo"
-                      : "Em Estoque";
-
-                  const badgeClass =
-                    p.quantidade === 0
-                      ? "badge-red"
-                      : p.quantidade < 10
-                      ? "badge-yellow"
-                      : "badge-green";
+                  const status = p.quantidade === 0 ? "Sem Estoque" : p.quantidade < 10 ? "Estoque Baixo" : "Em Estoque";
+                  const badgeClass = p.quantidade === 0 ? "badge-red" : p.quantidade < 10 ? "badge-yellow" : "badge-green";
 
                   return (
                     <tr key={p._id}>
                       <td>{p.nome}</td>
                       <td>{p.quantidade}</td>
-
+                      <td><span className={`badge ${badgeClass}`}>{status}</span></td>
+                      <td>{p.preco.toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}</td>
+                      <td className="descricao-cell">{p.descricao || "-"}</td>
                       <td>
-                        <span className={`badge ${badgeClass}`}>
-                          {status}
-                        </span>
-                      </td>
-
-                      <td>
-                        {p.preco.toLocaleString("pt-BR", {
-                          style: "currency",
-                          currency: "BRL",
-                        })}
-                      </td>
-
-                      <td className="descricao-cell">
-                        {p.descricao || "-"}
-                      </td>
-
-                      <td>
-                        <button
-                          className="btn-edit"
-                          onClick={() => abrirModalEditar(p)}
-                        >
-                          Editar
-                        </button>
-
-                        <button className="btn-delete" onClick={() => abrirModalExcluir(p)}>
-                            Excluir
-                        </button>
+                        <button className="btn-edit" onClick={() => abrirModalEditar(p)}>Editar</button>
+                        <button className="btn-delete" onClick={() => abrirModalExcluir(p)}>Excluir</button>
                       </td>
                     </tr>
                   );
@@ -200,26 +178,9 @@ const handleRelatorioPDF = async () => {
         )}
       </div>
 
-      {modalAberto && (
-        <ModalAddProduct fechar={fecharModal} atualizar={carregar} />
-      )}
-
-      {modalEditarAberto && (
-        <ModalEditProduct
-          produto={produtoEditando}
-          fechar={fecharModalEditar}
-          atualizar={carregar}
-        />
-      )}
-
-      {modalExcluirAberto && (
-        <ModalDeleteProduct
-            produto={produtoExcluindo}
-            fechar={fecharModalExcluir}
-            atualizar={carregar}
-        />
-        )}
-
+      {modalAberto && <ModalAddProduct fechar={fecharModal} atualizar={carregar} />}
+      {modalEditarAberto && <ModalEditProduct produto={produtoEditando} fechar={fecharModalEditar} atualizar={carregar} />}
+      {modalExcluirAberto && <ModalDeleteProduct produto={produtoExcluindo} fechar={fecharModalExcluir} atualizar={carregar} />}
     </div>
   );
 }

@@ -62,9 +62,7 @@ const Dashboard = () => {
               <div className="metric-value">
                 {totalProdutos.toLocaleString("pt-BR")}
               </div>
-              <p className="metric-caption">
-                Total de produtos cadastrados
-              </p>
+              <p className="metric-caption">Total de produtos cadastrados</p>
             </div>
 
             <div className="metric-card">

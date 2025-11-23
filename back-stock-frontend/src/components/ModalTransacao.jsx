@@ -76,7 +76,6 @@ function ModalTransacao({ fechar, atualizar }) {
     }
   };
 
-  // regras visuais
   const exigeProduto = ["entrada", "saída", "venda"].includes(tipo);
   const exigeQuantidade = exigeProduto;
 
@@ -91,7 +90,6 @@ function ModalTransacao({ fechar, atualizar }) {
 
         <form className="modal-form" onSubmit={salvar}>
           
-          {/* Tipo */}
           <div className="form-group">
             <label>Tipo</label>
             <select
@@ -114,7 +112,6 @@ function ModalTransacao({ fechar, atualizar }) {
             </select>
           </div>
 
-          {/* Produto */}
           {exigeProduto && (
             <div className="form-group">
               <label>Produto</label>
@@ -133,7 +130,6 @@ function ModalTransacao({ fechar, atualizar }) {
             </div>
           )}
 
-          {/* Quantidade */}
           {exigeQuantidade && (
             <div className="form-group">
               <label>Quantidade</label>
@@ -148,7 +144,6 @@ function ModalTransacao({ fechar, atualizar }) {
             </div>
           )}
 
-          {/* Valor */}
           <div className="form-group">
             <label>Valor (R$)</label>
             <input
@@ -161,7 +156,6 @@ function ModalTransacao({ fechar, atualizar }) {
             />
           </div>
 
-          {/* Observação */}
           <div className="form-group">
             <label>Observações</label>
             <textarea
@@ -172,7 +166,6 @@ function ModalTransacao({ fechar, atualizar }) {
             />
           </div>
 
-          {/* Botões */}
           <div className="modal-buttons">
             <button type="button" className="btn-cancel" onClick={fechar}>
               Cancelar

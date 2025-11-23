@@ -4,6 +4,52 @@ import "../../assets/styles/Client.css";
 
 import ModalAddCliente from "../../components/ModalAddClient";
 import ModalEditCliente from "../../components/ModalEditClient";
+import ModalConfirm from "../../components/ModalConfirm";
+
+function formatCpf(cpf) {
+  if (!cpf) return "";
+  const digits = cpf.replace(/\D/g, "");
+  if (digits.length !== 11) return cpf; 
+
+  return (
+    digits.slice(0, 3) +
+    "." +
+    digits.slice(3, 6) +
+    "." +
+    digits.slice(6, 9) +
+    "-" +
+    digits.slice(9, 11)
+  );
+}
+
+function formatTelefone(telefone) {
+  if (!telefone) return "";
+  const digits = telefone.replace(/\D/g, "");
+
+  if (digits.length === 11) {
+    return (
+      "(" +
+      digits.slice(0, 2) +
+      ") " +
+      digits.slice(2, 7) +
+      "-" +
+      digits.slice(7)
+    );
+  }
+
+  if (digits.length === 10) {
+    return (
+      "(" +
+      digits.slice(0, 2) +
+      ") " +
+      digits.slice(2, 6) +
+      "-" +
+      digits.slice(6)
+    );
+  }
+
+  return telefone;
+}
 
 function Clientes() {
   const [clientes, setClientes] = useState([]);
@@ -14,6 +60,9 @@ function Clientes() {
   const [modalAdd, setModalAdd] = useState(false);
   const [modalEdit, setModalEdit] = useState(false);
   const [clienteEditando, setClienteEditando] = useState(null);
+
+const [confirmarExclusao, setConfirmarExclusao] = useState(null);
+
 
   const carregar = async () => {
     try {
@@ -37,15 +86,16 @@ function Clientes() {
     setModalEdit(true);
   };
 
-  const removerCliente = async (id) => {
-    if (!confirm("Deseja excluir este cliente?")) return;
-    try {
-      await deleteClient(id);
-      carregar();
-    } catch (err) {
-      alert("Erro ao excluir cliente.");
-    }
-  };
+  const removerCliente = async () => {
+  try {
+    await deleteClient(confirmarExclusao._id);
+    setConfirmarExclusao(null);
+    carregar();
+  } catch (err) {
+    alert("Erro ao excluir cliente.");
+  }
+};
+
 
   const clientesFiltrados = clientes.filter((c) =>
     (c.nome + " " + c.cpf + " " + c.telefone)
@@ -108,8 +158,8 @@ function Clientes() {
                 clientesFiltrados.map((c) => (
                   <tr key={c._id}>
                     <td>{c.nome}</td>
-                    <td>{c.cpf}</td>
-                    <td>{c.telefone}</td>
+                    <td>{formatCpf(c.cpf)}</td>
+                    <td>{formatTelefone(c.telefone)}</td>
                     <td>
                       <button
                         className="btn-edit"
@@ -120,7 +170,7 @@ function Clientes() {
 
                       <button
                         className="btn-delete"
-                        onClick={() => removerCliente(c._id)}
+                        onClick={() => setConfirmarExclusao(c)}
                       >
                         Excluir
                       </button>
@@ -133,7 +183,9 @@ function Clientes() {
         )}
       </div>
 
-      {modalAdd && <ModalAddCliente fechar={() => setModalAdd(false)} atualizar={carregar} />}
+      {modalAdd && (
+        <ModalAddCliente fechar={() => setModalAdd(false)} atualizar={carregar} />
+      )}
       {modalEdit && (
         <ModalEditCliente
           fechar={() => setModalEdit(false)}
@@ -141,6 +193,15 @@ function Clientes() {
           atualizar={carregar}
         />
       )}
+      {confirmarExclusao && (
+        <ModalConfirm
+          titulo="Confirmar Exclusão"
+          mensagem={`Tem certeza que deseja excluir o cliente "${confirmarExclusao.nome}"?`}
+          confirmar={removerCliente}
+          fechar={() => setConfirmarExclusao(null)}
+        />
+      )}
+
     </div>
   );
 }

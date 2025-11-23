@@ -1,17 +1,28 @@
 import { useEffect, useState } from "react";
 import { listProducts } from "../../services/api";
 import "../../assets/styles/Leilao.css";
+import JSZip from "jszip";
+import { saveAs } from "file-saver";
 
 function Leilao() {
   const [produtos, setProdutos] = useState([]);
   const [carregando, setCarregando] = useState(true);
+  const [copiando, setCopiando] = useState(false);
+  const [feedback, setFeedback] = useState("");
+
+  const mostrarFeedback = (mensagem) => {
+    setFeedback(mensagem);
+    setTimeout(() => {
+      setFeedback("");
+    }, 3000);
+  };
 
   const carregar = async () => {
     try {
       const response = await listProducts();
       setProdutos(response.data);
     } catch (err) {
-      console.error("Erro ao carregar produtos:", err);
+      mostrarFeedback("Erro ao carregar produtos.");
     } finally {
       setCarregando(false);
     }
@@ -21,26 +32,52 @@ function Leilao() {
     carregar();
   }, []);
 
-  const copiarImagens = async (produto) => {
-    try {
-      const urls = produto.imagens;
+  const copiarTexto = async (produto) => {
+    const texto = `
+${produto.nome}
+Preço: ${produto.preco.toLocaleString("pt-BR", {
+      style: "currency",
+      currency: "BRL",
+    })}
+${produto.descricao || ""}
+    `.trim();
 
-      if (!urls || urls.length === 0) {
-        alert("Este produto não possui imagens.");
+    try {
+      await navigator.clipboard.writeText(texto);
+      mostrarFeedback("✅ Informações copiadas!");
+    } catch (err) {
+      mostrarFeedback("❌ Erro ao copiar.");
+    }
+  };
+
+  const baixarImagensZIP = async (produto) => {
+    try {
+      if (!produto.imagens || produto.imagens.length === 0) {
+        mostrarFeedback("⚠️ Este produto não possui imagens.");
         return;
       }
 
-      for (const url of urls) {
+      setCopiando(true);
+      mostrarFeedback("⏳ Gerando arquivo ZIP...");
+
+      const zip = new JSZip();
+      const pasta = zip.folder(produto.nome || "produto");
+
+      for (let i = 0; i < produto.imagens.length; i++) {
+        const url = produto.imagens[i];
         const response = await fetch(url);
         const blob = await response.blob();
-        const item = new ClipboardItem({ [blob.type]: blob });
-        await navigator.clipboard.write([item]);
+        pasta.file(`imagem_${i + 1}.jpg`, blob);
       }
 
-      alert("Imagens copiadas com sucesso!");
+      const conteudo = await zip.generateAsync({ type: "blob" });
+      saveAs(conteudo, `${produto.nome}.zip`);
+
+      setCopiando(false);
+      mostrarFeedback("📦 Imagens baixadas com sucesso!");
     } catch (err) {
-      console.error("Erro ao copiar:", err);
-      alert("Seu navegador não permite copiar imagens automaticamente.");
+      setCopiando(false);
+      mostrarFeedback("❌ Erro ao gerar ZIP de imagens.");
     }
   };
 
@@ -48,33 +85,48 @@ function Leilao() {
 
   return (
     <div className="leilao-page">
+      {feedback && (
+        <div className="toast-flutuante slide-in">
+          {feedback}
+        </div>
+      )}
+
       <h1 className="leilao-title">Painel de Leilão</h1>
       <p className="leilao-subtitle">
-        Clique para visualizar e copiar as imagens dos produtos.
+        Copie rapidamente as informações ou baixe todas as imagens para anunciar no WhatsApp.
       </p>
 
       <div className="leilao-container">
         {produtos.map((produto) => (
           <div key={produto._id} className="leilao-card">
-            <h2 className="produto-nome">{produto.nome}</h2>
+            <div className="leilao-card-header">
+              <h2 className="produto-nome">{produto.nome}</h2>
 
-            <p className="produto-preco">
-              {produto.preco.toLocaleString("pt-BR", {
-                style: "currency",
-                currency: "BRL",
-              })}
-            </p>
+              <p className="produto-preco">
+                {produto.preco.toLocaleString("pt-BR", {
+                  style: "currency",
+                  currency: "BRL",
+                })}
+              </p>
+            </div>
 
             {produto.descricao && (
               <p className="produto-desc">{produto.descricao}</p>
             )}
 
-            <button
-              className="copiar-btn"
-              onClick={() => copiarImagens(produto)}
-            >
-              📋 Copiar imagens
-            </button>
+            <div className="leilao-buttons">
+              <button className="btn-primary" onClick={() => copiarTexto(produto)}>
+                📋 Copiar texto
+              </button>
+
+              <button
+                className="btn-secondary"
+                onClick={() => baixarImagensZIP(produto)}
+                disabled={copiando}
+              >
+                {copiando ? "Baixando..." : "📦 Baixar imagens"}
+              </button>
+            </div>
 
             <div className="imagens-grid">
               {produto.imagens?.map((url, index) => (

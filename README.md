@@ -101,6 +101,31 @@ index.html
 
 ---
 
+## Integração com o Back-end
+
+O front-end se conecta ao back-end através do arquivo:
+
+src/services/api.js
+
+
+Exemplo de configuração:
+
+export const api = axios.create({
+  baseURL: "http://localhost:3000/api",
+  withCredentials: true
+});
+
+
+Todas as rotas do back-end seguem o padrão /api/*
+
+O token JWT é recebido via cookie HttpOnly
+
+O navegador envia o cookie automaticamente em cada requisição
+
+Para deploy, basta alterar o baseURL para a URL do servidor online
+
+---
+
 ## 🛠️ Como Rodar o Projeto
 
 ### 📦 Instalar dependências
@@ -132,5 +157,3 @@ Nota: Modifique a variável baseURL neste arquivo caso mude o endereço do servi
 
 ---
 
-## 📄 Licença
-Este projeto é de uso privado e exclusivo do cliente.

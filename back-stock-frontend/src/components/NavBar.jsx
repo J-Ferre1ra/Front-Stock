@@ -1,5 +1,5 @@
 import { NavLink, useNavigate } from "react-router-dom";
-import "../assets/styles/navBar.css";
+import "../assets/styles/NavBar.css";
 import { logoutRequest } from "../services/api";
 
 const Navbar = () => {

@@ -1,5 +1,6 @@
 import { useState } from "react";
-import "../assets/styles/ModalTransacao.css"; // usa o mesmo estilo premium
+import "../assets/styles/ModalTransacao.css"; 
+import "../assets/styles/buttons.css";
 
 function ModalPeriodo({ fechar, gerar }) {
   const [tipoPeriodo, setTipoPeriodo] = useState("7dias");
@@ -68,11 +69,11 @@ function ModalPeriodo({ fechar, gerar }) {
           )}
 
           <div className="modal-buttons">
-            <button type="button" className="btn-cancel" onClick={fechar}>
+            <button type="button" className="btn-danger" onClick={fechar}>
               Cancelar
             </button>
 
-            <button type="submit" className="btn-save">
+            <button type="submit" className="btn-primary">
               Gerar Relatório
             </button>
           </div>

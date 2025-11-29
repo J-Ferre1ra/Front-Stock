@@ -1,4 +1,5 @@
 import "../assets/styles/ModalConfirm.css";
+import "../assets/styles/buttons.css";
 
 function ModalConfirm({ titulo, mensagem, confirmar, fechar }) {
   return (
@@ -9,11 +10,11 @@ function ModalConfirm({ titulo, mensagem, confirmar, fechar }) {
         <p className="confirm-message">{mensagem}</p>
 
         <div className="confirm-buttons">
-          <button className="btn-cancel" onClick={fechar}>
+          <button className="btn-secondary" onClick={fechar}>
             Cancelar
           </button>
 
-          <button className="btn-delete" onClick={confirmar}>
+          <button className="btn-danger" onClick={confirmar}>
             Confirmar
           </button>
         </div>

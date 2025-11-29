@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { listProducts, createTransaction } from "../services/api";
 import "../assets/styles/ModalTransacao.css";
+import "../assets/styles/buttons.css"; 
 
 function ModalTransacao({ fechar, atualizar }) {
   const [tipo, setTipo] = useState("entrada");
@@ -167,10 +168,10 @@ function ModalTransacao({ fechar, atualizar }) {
           </div>
 
           <div className="modal-buttons">
-            <button type="button" className="btn-cancel" onClick={fechar}>
+            <button type="button" className="btn-secondary" onClick={fechar}>
               Cancelar
             </button>
-            <button type="submit" className="btn-save" disabled={loading}>
+            <button type="submit" className="btn-primary" disabled={loading}>
               {loading ? "Salvando..." : "Salvar Transação"}
             </button>
           </div>

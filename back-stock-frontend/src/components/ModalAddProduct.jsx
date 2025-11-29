@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { createProduct } from "../services/api";
 import "../assets/styles/ModalProduct.css";
+import "../assets/styles/buttons.css";
 
 function ModalAddProduct({ fechar, atualizar }) {
   const [nome, setNome] = useState("");
@@ -105,11 +106,11 @@ function ModalAddProduct({ fechar, atualizar }) {
           />
 
           <div className="modal-buttons">
-            <button type="button" className="btn-cancel" onClick={fechar}>
+            <button type="button" className="btn-secondary" onClick={fechar}>
               Cancelar
             </button>
 
-            <button className="btn-save" type="submit" disabled={loading}>
+            <button className="btn-primary" type="submit" disabled={loading}>
               {loading ? "Salvando..." : "Salvar"}
             </button>
           </div>

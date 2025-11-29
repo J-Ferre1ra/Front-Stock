@@ -122,23 +122,42 @@
   color: #6b7280;
 }
 
-/* Botão principal */
 .login-button {
   margin-top: 16px;
   width: 100%;
   border: none;
   border-radius: 10px;
-  background-color: #020617; /* quase preto/azul bem escuro */
-  color: #ffffff;
-  font-size: 15px;
+  
+  background-color: #2563eb;
+
+  color: white;
+  font-size: 16px;
   font-weight: 600;
+
   padding: 14px 20px;
   cursor: pointer;
+
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
+
+  transition: all 0.2s ease-in-out;
+
+  box-shadow: 0 4px 10px rgba(0,0,0,0.12);
 }
+
+.login-button:hover {
+  background-color: #1d4ed8; 
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.18);
+}
+
+.login-button:active {
+  transform: translateY(0px);
+  box-shadow: 0 3px 8px rgba(0,0,0,0.18);
+}
+
 
 .login-button-icon {
   font-size: 16px;

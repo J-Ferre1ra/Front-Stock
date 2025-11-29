@@ -1,8 +1,8 @@
 import { useState } from "react";
 import "../assets/styles/ModalRelatorio.css";
+import api from "../services/api";
 
 function ModalRelatorio({ fechar }) {
-  // Como não temos o componente Pai (Dashboard), controlamos o Toast aqui mesmo
   const [feedback, setFeedback] = useState("");
 
   const mostrarFeedback = (mensagem) => {
@@ -13,23 +13,24 @@ function ModalRelatorio({ fechar }) {
   const gerarEstoque = () => {
     mostrarFeedback("⏳ Gerando relatório de Estoque...");
     setTimeout(() => {
-       window.open("http://localhost:3000/api/relatorio/estoque-com-imagens", "_blank");
-       mostrarFeedback("✅ Relatório aberto em nova aba!");
+      const url = `${api.defaults.baseURL}/relatorio/estoque-com-imagens`;
+      window.open(url, "_blank");
+      mostrarFeedback("✅ Relatório aberto em nova aba!");
     }, 500);
   };
 
   const gerarTransacoes = () => {
     mostrarFeedback("⏳ Gerando relatório de 30 dias...");
     setTimeout(() => {
-        window.open("http://localhost:3000/api/relatorio/transacoes?periodo=30dias", "_blank");
-        mostrarFeedback("✅ Relatório aberto em nova aba!");
+      const url = `${api.defaults.baseURL}/relatorio/transacoes?periodo=30dias`;
+      window.open(url, "_blank");
+      mostrarFeedback("✅ Relatório aberto em nova aba!");
     }, 500);
   };
 
   return (
     <div className="relatorio-overlay">
-       {/* TOAST FLUTUANTE - Aparecerá por cima do modal */}
-       {feedback && <div className="toast-flutuante slide-in">{feedback}</div>}
+      {feedback && <div className="toast-flutuante slide-in">{feedback}</div>}
 
       <div className="relatorio-box relatorio-anim">
         <h2 className="relatorio-title">Gerar Relatório</h2>

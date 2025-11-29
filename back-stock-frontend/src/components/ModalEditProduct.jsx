@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { editProduct } from "../services/api";
 import "../assets/styles/ModalProduct.css";
+import "../assets/styles/buttons.css";
 
 function ModalEditarProduto({ produto, fechar, atualizar }) {
   const [nome, setNome] = useState(produto.nome);

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { createClient } from "../services/api";
 import "../assets/styles/ModalClient.css";
+import "../assets/styles/buttons.css";
 
 function ModalAddCliente({ fechar, atualizar }) {
   const [nome, setNome] = useState("");
@@ -68,10 +69,10 @@ function ModalAddCliente({ fechar, atualizar }) {
           />
 
           <div className="modal-buttons">
-            <button className="btn-cancel" type="button" onClick={fechar}>
+            <button className="btn-secondary" type="button" onClick={fechar}>
               Cancelar
             </button>
-            <button className="btn-save" type="submit" disabled={loading}>
+            <button className="btn-primary" type="submit" disabled={loading}>
               {loading ? "Salvando..." : "Salvar Cliente"}
             </button>
           </div>

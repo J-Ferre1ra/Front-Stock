@@ -53,22 +53,6 @@
   margin-top: 18px;
 }
 
-.btn-save {
-  background: #111827;
-  color: white;
-  padding: 9px 18px;
-  border-radius: 8px;
-  border: none;
-  cursor: pointer;
-}
-
-.btn-cancel {
-  background: #e5e7eb;
-  padding: 9px 18px;
-  border-radius: 8px;
-  border: none;
-  cursor: pointer;
-}
 
 .modal-error {
   background: #fee2e2;
@@ -97,15 +81,3 @@
   }
 }
 
-.btn-delete-confirm {
-  background: #dc2626;
-  color: white;
-  padding: 9px 18px;
-  border-radius: 8px;
-  border: none;
-  cursor: pointer;
-}
-
-.btn-delete-confirm:hover {
-  background: #b91c1c;
-}

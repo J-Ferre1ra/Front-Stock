@@ -79,29 +79,3 @@
   justify-content: flex-end;
   gap: 10px;
 }
-
-.btn-save {
-  background: #111827;
-  color: white;
-  padding: 9px 16px;
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
-}
-
-.btn-save:hover {
-  opacity: 0.85;
-}
-
-.btn-cancel {
-  background: #f3f4f6;
-  color: #111827;
-  border: 1px solid #e5e7eb;
-  padding: 9px 16px;
-  border-radius: 10px;
-  cursor: pointer;
-}
-
-.btn-cancel:hover {
-  background: #e5e7eb;
-}

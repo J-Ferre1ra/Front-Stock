@@ -221,7 +221,7 @@ const Dashboard = () => {
               <div className="quick-actions-grid">
                 <button
                   className="quick-action-card"
-                  onClick={() => navigate("/transacoes")}
+                  onClick={() => navigate("/produtos")}
                 >
                   <div className="quick-action-icon">📦</div>
                   <span className="quick-action-title">Adicionar Estoque</span>

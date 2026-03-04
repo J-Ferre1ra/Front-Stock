@@ -89,7 +89,7 @@ function Transacoes() {
           </p>
         </div>
 
-        <button className="btn-report" onClick={() => setModalPeriodoAberto(true)}>
+        <button className="btn-primary" onClick={() => setModalPeriodoAberto(true)}>
           📄 Relatório PDF
         </button>
       </header>

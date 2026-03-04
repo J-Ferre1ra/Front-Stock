@@ -47,17 +47,26 @@ function Transacoes() {
   });
 
   const gerarRelatorio = (filtros) => {
-    mostrarFeedback("⏳ Iniciando download do relatório...");
-    
-    let url = "http://localhost:3000/api/relatorio/transacoes";
+  mostrarFeedback("⏳ Iniciando download do relatório...");
 
-    if (filtros.tipoPeriodo) {
-      url += `?periodo=${filtros.tipoPeriodo}`;
-    }
+  let url = `${import.meta.env.VITE_API_URL}/relatorio/transacoes`;
 
-    if (filtros.inicio && filtros.fim) {
-      url += `?inicio=${filtros.inicio}&fim=${filtros.fim}`;
-    }
+  const params = new URLSearchParams();
+
+  if (filtros.tipoPeriodo) {
+    params.append("periodo", filtros.tipoPeriodo);
+  }
+
+  if (filtros.inicio && filtros.fim) {
+    params.append("inicio", filtros.inicio);
+    params.append("fim", filtros.fim);
+  }
+
+  if (params.toString()) {
+    url += `?${params.toString()}`;
+  }
+
+  window.open(url, "_blank");
 
     // Pequeno delay para abrir a janela, apenas para o usuário ver o feedback
     setTimeout(() => {
